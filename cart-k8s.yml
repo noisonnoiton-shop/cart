@@ -1,0 +1,58 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: cart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cart
+  template:
+    metadata:
+      labels:
+        app: cart
+    spec:
+      containers:
+        - name: cart
+          image: registry.localtest.com/cart:1.1
+          ports:
+            - containerPort: 8181
+      hostAliases:
+      - ip: "20.194.18.209"
+        hostnames:
+        - "account.skcc.co.kr"
+        - "apigateway.skcc.co.kr"
+        - "bff.skcc.co.kr"
+        - "cart.skcc.co.kr"
+        - "order.skcc.co.kr"
+        - "payment.skcc.co.kr"
+        - "product.skcc.co.kr"
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: cart-ingress
+spec:
+  rules:
+  - host: cart.skcc.co.kr
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: cart-svc
+          servicePort: 8181
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart-svc
+  labels:
+    app: cart
+spec:
+  ports:
+    - port: 8181
+      targetPort: 8181
+      name: cart-svc
+  selector:
+    app: cart
