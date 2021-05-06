@@ -1,0 +1,33 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: cart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cart
+  template:
+    metadata:
+      labels:
+        app: cart
+    spec:
+      containers:
+        - name: cart
+          image: noisonnoiton/cart:v1
+          ports:
+            - containerPort: 8181
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart
+  labels:
+    app: cart
+spec:
+  ports:
+    - port: 8181
+      targetPort: 8181
+      name: cart
+  selector:
+    app: cart
