@@ -1,0 +1,439 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "cart API",
+    "version": "1.0",
+    "title": "cart",
+    "termsOfService": "urn:tos",
+    "contact": {
+      
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "host": "localhost:8181",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "cart-controller",
+      "description": "Cart Controller"
+    }
+  ],
+  "paths": {
+    "/v1/carts": {
+      "put": {
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "uri": "http://a1001c0e806a748679deb2115e1930bf-0f412fe779c96488.elb.ap-northeast-2.amazonaws.com/v1/carts",
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK",
+          "connectionId": "vwdm61",
+          "httpMethod": "PUT",
+          "type": "http_proxy"
+        },
+        "tags": [
+          "cart-controller"
+        ],
+        "summary": "addCart",
+        "operationId": "addCartUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+
+        "parameters": [
+          {
+            "in": "body",
+            "name": "cart",
+            "description": "cart",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Cart"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/carts/events": {
+      "get": {
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "uri": "http://a1001c0e806a748679deb2115e1930bf-0f412fe779c96488.elb.ap-northeast-2.amazonaws.com/v1/carts/events",
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK",
+          "connectionId": "vwdm61",
+          "httpMethod": "GET",
+          "type": "http_proxy"
+        },
+        "tags": [
+          "cart-controller"
+        ],
+        "summary": "getCartEvent",
+        "operationId": "getCartEventUsingGET",
+
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CartEvent"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/carts/account/{accountId}": {
+      "get": {
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "uri": "http://a1001c0e806a748679deb2115e1930bf-0f412fe779c96488.elb.ap-northeast-2.amazonaws.com/v1/carts/account/{accountId}",
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK",
+          "connectionId": "vwdm61",
+          "httpMethod": "GET",
+          "type": "http_proxy"
+        },
+        "tags": [
+          "cart-controller"
+        ],
+        "summary": "findCartByAccountId",
+        "operationId": "findCartByAccountIdUsingGET",
+
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "accountId",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Cart"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/carts/{id}": {
+      "post": {
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "uri": "http://a1001c0e806a748679deb2115e1930bf-0f412fe779c96488.elb.ap-northeast-2.amazonaws.com/v1/carts/{id}",
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK",
+          "connectionId": "vwdm61",
+          "httpMethod": "POST",
+          "type": "http_proxy"
+        },
+        "tags": [
+          "cart-controller"
+        ],
+        "summary": "editCartQuantity",
+        "operationId": "editCartQuantityUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "quantity",
+            "description": "quantity",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "uri": "http://a1001c0e806a748679deb2115e1930bf-0f412fe779c96488.elb.ap-northeast-2.amazonaws.com/v1/carts/{id}",
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK",
+          "connectionId": "vwdm61",
+          "httpMethod": "DELETE",
+          "type": "http_proxy"
+        },
+        "tags": [
+          "cart-controller"
+        ],
+        "summary": "deleteCart",
+        "operationId": "deleteCartUsingDELETE",
+
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "definitions": {
+    "Cart": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "productActive": {
+          "type": "string"
+        },
+        "productId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "productInfo": {
+          "$ref": "#/definitions/CartProduct"
+        },
+        "productQuantity": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "Cart"
+    },
+    "CartEvent": {
+      "type": "object",
+      "properties": {
+        "cartId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "eventType": {
+          "type": "string",
+          "enum": [
+            "CartProductAdded",
+            "CartProductDeleted",
+            "CartProductInactive",
+            "CartProductActive",
+            "CartQuantityEdited",
+            "CartProductAddFailed",
+            "CartProductDeleteFailed",
+            "CartProductInactiveFailed",
+            "CartProductActiveFailed",
+            "CartQuantityEditFailed"
+          ]
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "payload": {
+          "$ref": "#/definitions/CartPayload"
+        },
+        "txId": {
+          "type": "string"
+        }
+      },
+      "title": "CartEvent"
+    },
+    "CartPayload": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "productActive": {
+          "type": "string"
+        },
+        "productId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "productInfo": {
+          "$ref": "#/definitions/CartProduct"
+        },
+        "productQuantity": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "CartPayload"
+    },
+    "CartProduct": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "categoryName": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "img": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "originalPrice": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "resultPrice": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "salePercentage": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "salePrice": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "CartProduct"
+    }
+  }
+}

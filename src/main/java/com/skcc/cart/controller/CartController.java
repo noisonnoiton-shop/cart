@@ -33,7 +33,7 @@ public class CartController {
 		this.cartService = cartService;
 	}
 	
-	@GetMapping(value="/carts/{accountId}")
+	@GetMapping(value="/carts/account/{accountId}")
 	public List<Cart> findCartByAccountId(@PathVariable long accountId) {
 		return this.cartService.findCartByAccountId(accountId);
 	}
