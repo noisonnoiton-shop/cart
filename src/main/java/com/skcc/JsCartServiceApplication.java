@@ -8,6 +8,7 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -22,6 +23,9 @@ public class JsCartServiceApplication {
 	
 	@Autowired
 	private DataSource dataSource;
+
+	@Autowired
+	private ApplicationContext applicationContext;
 	
 	@Bean 
 	public RestTemplate restTemplate() {
@@ -32,6 +36,8 @@ public class JsCartServiceApplication {
 	public SqlSessionFactory sqlSessionFactory() throws Exception{
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource);
+
+		sessionFactory.setConfigLocation(applicationContext.getResource("classpath:mybatis-config.xml"));
 		
 		Resource[] res = new PathMatchingResourcePatternResolver().getResources("classpath:mappers/*Mapper.xml");
 		

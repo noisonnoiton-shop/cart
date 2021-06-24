@@ -1,4 +1,5 @@
 --sequence
+drop sequence if EXISTS event_seq;
 create sequence event_seq;
 
 -- carts
@@ -9,7 +10,7 @@ CREATE TABLE carts (
   ,productId bigint  NOT NULL
   ,productActive varchar(255) NOT NULL
   ,productQuantity bigint NOT NULL
-  ,productInfo text NOT NULL
+  ,productInfo longvarchar NOT NULL
   ,createdAt datetime NOT NULL
   ,PRIMARY KEY (`id`)
 );
@@ -21,7 +22,7 @@ CREATE TABLE cart_events (
   ,domain varchar(255) NOT NULL
   ,cartId bigint  NOT NULL
   ,eventType varchar(255)  NOT NULL
-  ,payload text NOT NULL
+  ,payload longvarchar NOT NULL
   ,txId varchar(255)  NOT NULL
   ,createdAt datetime NOT NULL
   ,PRIMARY KEY (`id`)
