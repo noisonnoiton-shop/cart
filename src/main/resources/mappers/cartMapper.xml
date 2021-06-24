@@ -62,7 +62,7 @@
 	</select>
 	
 	<select id="getCartEventId" resultType="long">
-		select ${sequence-nextval};
+		select ${sequence-nextval}
 	</select>
 	
 	<insert id="createCartEvent" parameterMap="CartEvent">
