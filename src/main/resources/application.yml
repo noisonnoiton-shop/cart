@@ -4,7 +4,7 @@ server:
 domain:
   name: cart
 
-sequence-nextval: event_seq.nextval
+sequence-nextval: nextval(event_seq)
 
 spring:
   application:
