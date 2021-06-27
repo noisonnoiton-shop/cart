@@ -11,7 +11,7 @@ VALUES
 ,'{"id":1,"name":"Esprit Ruffle Shirt","categoryName":"women","amount":100,"originalPrice":80000,"salePercentage":5,"salePrice":4000,"resultPrice":76000,"img":"images/product-01.jpg"}'
 ,NOW());
 
-INSERT INTO cart_events
+INSERT INTO cart_event
 (id,cart_id,domain,event_type,payload,tx_id,created_at)
 VALUES
 (1,1,'cart','CartProductAdded'
