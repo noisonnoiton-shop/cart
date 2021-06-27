@@ -1,8 +1,17 @@
 package com.skcc.cart.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
+
+import com.skcc.cart.domain.Cart;
+import com.skcc.cart.domain.CartProduct;
+import com.skcc.cart.event.message.CartEvent;
+import com.skcc.cart.event.message.CartEventType;
+import com.skcc.cart.event.message.CartPayload;
+import com.skcc.cart.publish.CartPublish;
+import com.skcc.cart.repository.CartEventRepository;
+import com.skcc.cart.repository.CartRepository;
+import com.skcc.product.event.message.ProductEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,19 +20,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.skcc.cart.domain.Cart;
-import com.skcc.cart.domain.CartProduct;
-import com.skcc.cart.event.message.CartEvent;
-import com.skcc.cart.event.message.CartEventType;
-import com.skcc.cart.event.message.CartPayload;
-import com.skcc.cart.publish.CartPublish;
-import com.skcc.cart.repository.CartMapper;
-import com.skcc.product.event.message.ProductEvent;
-
 @Service
 public class CartService {
 	
-	private CartMapper cartMapper;
+	// @Autowired
+	// private CartMapper cartMapper;
+
+	private CartRepository cartRepository;
+	private CartEventRepository cartEventRepository;
 	private CartPublish cartPublish;
 	
 	@Value("${domain.name}")
@@ -36,17 +40,20 @@ public class CartService {
 	private static final Logger log = LoggerFactory.getLogger(CartService.class);
 
 	@Autowired
-	public CartService(CartMapper cartMapper, CartPublish cartPublish) {
-		this.cartMapper = cartMapper;
+	public CartService(CartRepository cartRepository, CartEventRepository cartEventRepository, CartPublish cartPublish) {
+		this.cartRepository = cartRepository;
+		this.cartEventRepository = cartEventRepository;
 		this.cartPublish = cartPublish;
 	}
 	
 	public List<Cart> findCartByAccountId(long accountId) {
-		return this.cartMapper.findCartByAccountId(accountId);
+		// return this.cartMapper.findCartByAccountId(accountId);
+		return this.cartRepository.findCartByAccountId(accountId);
 	}
 	
 	public List<CartEvent> getCartEvent() {
-		return this.cartMapper.getCartEvent();
+		// return this.cartMapper.getCartEvent();
+		return this.cartEventRepository.findAll();
 	}
 	
 	public boolean addCartAndCreatePublishEvent(Cart cart) {
@@ -217,13 +224,15 @@ public class CartService {
 	public Cart addCart(Cart cart) throws Exception {
 		if(!this.addCartValidationCheck(cart))
 			throw new Exception();
-		this.cartMapper.addCart(cart);
+		// this.cartMapper.addCart(cart);
+		this.cartRepository.save(cart);
 		
 		return cart;
 	}
 
-	public boolean deleteCart(long id) {
-		return this.cartMapper.deleteCart(id);
+	public void deleteCart(long id) {
+		// return this.cartMapper.deleteCart(id);
+		this.cartRepository.deleteById(id);
 	}
 
 	public void createPublishCartEvent(String txId, Cart cart, CartEventType cartEventType) {
@@ -233,7 +242,8 @@ public class CartService {
 	}
 	
 	public void createCartEvent(CartEvent cartEvent) {
-		this.cartMapper.createCartEvent(cartEvent);
+		// this.cartMapper.createCartEvent(cartEvent);
+		this.cartEventRepository.save(cartEvent);
 	}
 	 
 	public void publishCartEvent(CartEvent cartEvent) {
@@ -241,15 +251,20 @@ public class CartService {
 	}
 	
 	public Cart findById(long id) {
-		return this.cartMapper.findById(id);
+		// return this.cartMapper.findById(id);
+		return this.cartRepository.findById(id);
 	}
 	
 	public void setCartProductInactiveAndProductInfo(Cart cart) {
-		this.cartMapper.setCartProductInactiveAndProductInfo(cart);
+		// this.cartMapper.setCartProductInactiveAndProductInfo(cart);
+		cart.setProductActive("active");
+		this.cartRepository.save(cart);
 	}
 	
 	public void setCartProductActiveAndProductInfo(Cart cart) {
-		this.cartMapper.setCartProductActiveAndProductInfo(cart);
+		// this.cartMapper.setCartProductActiveAndProductInfo(cart);
+		cart.setProductActive("inactive");
+		this.cartRepository.save(cart);
 	}
 	
 	public void setCartQuantityValidationCheck(Cart cart) throws Exception{
@@ -259,15 +274,18 @@ public class CartService {
 	
 	public void setCartQuantity(Cart cart) throws Exception {
 		this.setCartQuantityValidationCheck(cart);
-		this.cartMapper.setCartQuantity(cart.getId(), cart.getProductQuantity());
+		// this.cartMapper.setCartQuantity(cart.getId(), cart.getProductQuantity());
+		this.cartRepository.save(cart);
 	}
 	
 	public List<Cart> findCartToBeProductInactiveById(ProductEvent productEvent){
-		return this.cartMapper.findCartToBeProductInactiveById(productEvent.getProductId());
+		// return this.cartMapper.findCartToBeProductInactiveById(productEvent.getProductId());
+		return this.cartRepository.findCartByProductIdAndProductActive(productEvent.getProductId(), "active");
 	}
 	
 	public List<Cart> findCartToBeProductActiveById(ProductEvent productEvent){
-		return this.cartMapper.findCartToBeProductActiveById(productEvent.getProductId());
+		// return this.cartMapper.findCartToBeProductActiveById(productEvent.getProductId());
+		return this.cartRepository.findCartByProductIdAndProductActive(productEvent.getProductId(), "inactive");
 	}
 	
 	public Cart convertProductEventCartToCart(Cart originCart, Cart convertedCart) {
@@ -305,25 +323,22 @@ public class CartService {
 			cart = resultCart;
 		
 		CartEvent cartEvent = new CartEvent();
-		cartEvent.setId(this.cartMapper.getCartEventId());
+		// cartEvent.setId(this.cartMapper.getCartEventId());
 		cartEvent.setCartId(cart.getId());
 		cartEvent.setDomain(domain);
 		cartEvent.setEventType(cartEventType);
 		cartEvent.setPayload(new CartPayload(cart.getId(), cart.getAccountId(), cart.getProductId(), cart.getProductActive(), cart.getProductQuantity(), cart.getProductInfo()));
 		cartEvent.setTxId(txId);
-		cartEvent.setCreatedAt(new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
+		cartEvent.setCreatedAt(LocalDateTime.now());
 		
 		log.info("in service cartEvent : {}", cartEvent.toString());
 		return cartEvent;
 	}
 	
-	public long getCartEventId() {
-		return this.cartMapper.getCartEventId();
-	}
-	
 	public boolean addCartValidationCheck(Cart cart) {
 		boolean valid = true;
-		if(this.cartMapper.findCartByProductId(cart.getAccountId(), cart.getProductId()) > 0)
+		// if(this.cartMapper.findCartByProductId(cart.getAccountId(), cart.getProductId()) > 0)
+		if(this.cartRepository.findCartByAccountIdAndProductId(cart.getAccountId(), cart.getProductId()).size() > 0)
 			valid = false;
 		return valid;
 	}

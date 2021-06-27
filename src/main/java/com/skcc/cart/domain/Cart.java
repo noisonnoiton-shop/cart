@@ -1,95 +1,50 @@
 package com.skcc.cart.domain;
 
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@ToString
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import com.skcc.cart.config.CartProductConverter;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Entity
 public class Cart {
-	
-	private long id;
-	private long accountId;
-	private long productId;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Column
+	private Long accountId;
+
+	@Column
+	private Long productId;
+
+	@Column(length = 255)
 	private String productActive;
-	private long productQuantity;
+
+	@Column
+	private Long productQuantity;
+	
+	@Column(columnDefinition = "TEXT")
+	@Convert(converter = CartProductConverter.class)
 	private CartProduct productInfo;
-	private String createdAt;
-	
-	public Cart(long id, long accountId, long productId, String productActive, long productQuantity,
-			CartProduct productInfo, String createdAt) {
-		super();
-		this.id = id;
-		this.accountId = accountId;
-		this.productId = productId;
-		this.productActive = productActive;
-		this.productQuantity = productQuantity;
-		this.productInfo = productInfo;
-		this.createdAt = createdAt;
-	}
-	
-	public Cart() {}
 
-	public long getId() {
-		return id;
-	}
+	@Column
+	@CreationTimestamp
+	private LocalDateTime createdAt;
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public long getAccountId() {
-		return accountId;
-	}
-
-	public void setAccountId(long accountId) {
-		this.accountId = accountId;
-	}
-
-	public long getProductId() {
-		return productId;
-	}
-
-	public void setProductId(long productId) {
-		this.productId = productId;
-	}
-
-	public String getProductActive() {
-		return productActive;
-	}
-
-	public void setProductActive(String productActive) {
-		this.productActive = productActive;
-	}
-
-	public long getProductQuantity() {
-		return productQuantity;
-	}
-
-	public void setProductQuantity(long productQuantity) {
-		this.productQuantity = productQuantity;
-	}
-
-	public CartProduct getProductInfo() {
-		return productInfo;
-	}
-
-	public void setProductInfo(CartProduct productInfo) {
-		this.productInfo = productInfo;
-	}
-
-	public String getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(String createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	@Override
-	public String toString() {
-		return "Cart [id=" + id + ", accountId=" + accountId + ", productId=" + productId + ", productActive="
-				+ productActive + ", productQuantity=" + productQuantity + ", productInfo=" + productInfo
-				+ ", createdAt=" + createdAt + "]";
-	}
-	
-	
 }
