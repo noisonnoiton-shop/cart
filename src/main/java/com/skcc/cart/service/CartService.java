@@ -224,8 +224,7 @@ public class CartService {
 	public Cart addCart(Cart cart) throws Exception {
 		if(!this.addCartValidationCheck(cart))
 			throw new Exception();
-		// this.cartMapper.addCart(cart);
-		this.cartRepository.save(cart);
+		cart = this.cartRepository.save(cart);
 		
 		return cart;
 	}
