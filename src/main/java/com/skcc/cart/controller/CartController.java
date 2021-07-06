@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.skcc.cart.domain.Cart;
 import com.skcc.cart.event.message.CartEvent;
 import com.skcc.cart.service.CartService;
 
 @RestController
 @RequestMapping("/v1")
+// @XRayEnabled
 public class CartController {
 	
 	private CartService cartService;

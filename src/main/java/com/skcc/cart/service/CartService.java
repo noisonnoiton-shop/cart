@@ -3,6 +3,7 @@ package com.skcc.cart.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.skcc.cart.domain.Cart;
 import com.skcc.cart.domain.CartProduct;
 import com.skcc.cart.event.message.CartEvent;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+// @XRayEnabled
 public class CartService {
 	
 	// @Autowired
