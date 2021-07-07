@@ -9,8 +9,8 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Component;
 
-@Component
-@EnableBinding(CartInputChannel.class)
+// @Component
+// @EnableBinding(CartInputChannel.class)
 public class CartSubscribe {
 
 	private CartService cartService;
@@ -20,12 +20,12 @@ public class CartSubscribe {
 		this.cartService = cartService;
 	}
 	
-	@StreamListener(CartInputChannel.productSoldOut)
+	// @StreamListener(CartInputChannel.productSoldOut)
 	public void setProductActiveToInactive(ProductEvent productEvent) {
 		this.cartService.setCartProductInactiveAndProductInfoAndCreatePublishEvent(productEvent);
 	}
 	
-	@StreamListener(CartInputChannel.productAmountAdded)
+	// @StreamListener(CartInputChannel.productAmountAdded)
 	public void setProductAmountAdded(ProductEvent productEvent) {
 		this.cartService.setCartProductActiveAndProductInfoAndCreatePublishEvent(productEvent);
 	}

@@ -7,9 +7,9 @@ public interface CartInputChannel {
 	String productSoldOut = "productSoldOut";
 	String productAmountAdded = "productAmountAdded";
 	
-	@Input(CartInputChannel.productSoldOut)
+	// @Input(CartInputChannel.productSoldOut)
 	SubscribableChannel productSoldOut();
 	
-	@Input(CartInputChannel.productAmountAdded)
+	// @Input(CartInputChannel.productAmountAdded)
 	SubscribableChannel productAmountAdded();
 }

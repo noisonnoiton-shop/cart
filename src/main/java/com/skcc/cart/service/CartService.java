@@ -9,6 +9,7 @@ import com.skcc.cart.domain.CartProduct;
 import com.skcc.cart.event.message.CartEvent;
 import com.skcc.cart.event.message.CartEventType;
 import com.skcc.cart.event.message.CartPayload;
+import com.skcc.cart.producer.CartProducer;
 import com.skcc.cart.publish.CartPublish;
 import com.skcc.cart.repository.CartEventRepository;
 import com.skcc.cart.repository.CartRepository;
@@ -27,10 +28,10 @@ public class CartService {
 	
 	// @Autowired
 	// private CartMapper cartMapper;
+	// private CartPublish cartPublish;
 
 	private CartRepository cartRepository;
 	private CartEventRepository cartEventRepository;
-	private CartPublish cartPublish;
 	
 	@Value("${domain.name}")
 	private String domain;
@@ -38,14 +39,16 @@ public class CartService {
 	
 	@Autowired
 	private CartService cartService;
+
+	@Autowired
+	private CartProducer cartProducer;
 	
 	private static final Logger log = LoggerFactory.getLogger(CartService.class);
 
 	@Autowired
-	public CartService(CartRepository cartRepository, CartEventRepository cartEventRepository, CartPublish cartPublish) {
+	public CartService(CartRepository cartRepository, CartEventRepository cartEventRepository) {
 		this.cartRepository = cartRepository;
 		this.cartEventRepository = cartEventRepository;
-		this.cartPublish = cartPublish;
 	}
 	
 	public List<Cart> findCartByAccountId(long accountId) {
@@ -248,7 +251,8 @@ public class CartService {
 	}
 	 
 	public void publishCartEvent(CartEvent cartEvent) {
-		this.cartPublish.send(cartEvent);
+		// this.cartPublish.send(cartEvent);
+		this.cartProducer.send(cartEvent);
 	}
 	
 	public Cart findById(long id) {

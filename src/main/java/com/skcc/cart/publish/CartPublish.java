@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 import com.skcc.cart.event.channel.CartOutputChannel;
 import com.skcc.cart.event.message.CartEvent;
 
-@Component
-@EnableBinding(CartOutputChannel.class)
+// @Component
+// @EnableBinding(CartOutputChannel.class)
 public class CartPublish {
 	
 	private CartOutputChannel cartOutputChannel;
