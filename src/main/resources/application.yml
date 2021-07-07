@@ -45,44 +45,61 @@ spring:
   #   initialization-mode: always
   #   continue-on-error: true
 
+
+  rabbitmq:
+    addresses: localhost
+    username: labs
+    password: awesome-rabbitmq
   cloud:
     stream:
-      binders:
-        rabbitmq:
-          type: rabbit
-          environment:
-            spring:
-              rabbitmq:
-                #host: rabbitmq
-                host: localhost
-                port: 5672
-                username: labs
-                password: awesome-rabbitmq
       bindings:
-        productAmountAdded:
-          destination: productExchange
-          group: cart.productAmountAdded
-          content-type: application/json
-        productSoldOut:
-          destination: productExchange
-          group: cart.productSoldOut
-          content-type: application/json
-        CartOutput:
-          destination: cartExchange
+        cartOutput:
+          destination: cartTopic
           content-type: application/json
       rabbit:
         bindings:
-          productAmountAdded:
-            consumer:
-              autoBindDlq: true
-              bindingRoutingKey: product.ProductAmountAdded.#
-          productSoldOut:
-            consumer:
-              autoBindDlq: true
-              bindingRoutingKey: product.ProductSoldOut.#
-          CartOutput:
+          cartOutput:
             producer:
               routing-key-expression: headers['routeTo']
+              
+  # cloud:
+  #   stream:
+  #     binders:
+  #       rabbitmq:
+  #         type: rabbit
+  #         environment:
+  #           spring:
+  #             rabbitmq:
+  #               #host: rabbitmq
+  #               host: localhost
+  #               port: 5672
+  #               username: labs
+  #               password: awesome-rabbitmq
+  #     bindings:
+  #       productAmountAdded:
+  #         destination: productExchange
+  #         group: cart.productAmountAdded
+  #         content-type: application/json
+  #       productSoldOut:
+  #         destination: productExchange
+  #         group: cart.productSoldOut
+  #         content-type: application/json
+  #       CartOutput:
+  #         destination: cartExchange
+  #         content-type: application/json
+  #     rabbit:
+  #       bindings:
+  #         productAmountAdded:
+  #           consumer:
+  #             autoBindDlq: true
+  #             bindingRoutingKey: product.ProductAmountAdded.#
+  #         productSoldOut:
+  #           consumer:
+  #             autoBindDlq: true
+  #             bindingRoutingKey: product.ProductSoldOut.#
+  #         CartOutput:
+  #           producer:
+  #             routing-key-expression: headers['routeTo']
               
 management:
   endpoints:

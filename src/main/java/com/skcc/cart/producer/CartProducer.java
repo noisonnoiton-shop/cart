@@ -17,13 +17,13 @@ public class CartProducer {
 
   private final StreamBridge streamBridge;
 
-  @Value("${domain.cart.name}")
+  @Value("${domain.name}")
   private String domain;
 
   public boolean send(CartEvent cartEvent) {
     log.info("routeTo" + domain + "." + cartEvent.getEventType());
 
-    return this.streamBridge.send("cartTopic", MessageBuilder.withPayload(cartEvent)
+    return this.streamBridge.send("cartOutput", MessageBuilder.withPayload(cartEvent)
     .setHeader("routeTo", domain + "." + cartEvent.getEventType()).build());
   }
 }
