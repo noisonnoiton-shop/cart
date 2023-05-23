@@ -111,7 +111,7 @@
 		</dependency>
 
 		<!-- AWS X-Ray dependency  -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-xray-recorder-sdk-apache-http</artifactId>
 		</dependency>
@@ -134,7 +134,7 @@
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-xray-recorder-sdk-core</artifactId>
-		</dependency>
+		</dependency> -->
 
 	</dependencies>
 
@@ -157,13 +157,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<dependency>
+			<!-- <dependency>
 				<groupId>com.amazonaws</groupId>
 				<artifactId>aws-xray-recorder-sdk-bom</artifactId>
 				<version>2.9.0</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>
+			</dependency> -->
 		</dependencies>
 	</dependencyManagement>
 </project>
